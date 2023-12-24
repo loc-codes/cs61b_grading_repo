@@ -1,7 +1,8 @@
 package deque;
 
-public class LinkedListDeque<T> {
+import java.util.Iterator;
 
+public class LinkedListDeque<T> implements Deque<T> {
     private class Node {
         public T item;
         public Node next;
@@ -122,6 +123,10 @@ public class LinkedListDeque<T> {
         }
         System.out.println();
         //System.out.println("printDeque called");
+    }
+
+    public Iterator<T> iterator(){
+        return null;
     }
 
     public static void main (String[] args){

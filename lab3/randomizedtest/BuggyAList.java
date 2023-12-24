@@ -14,7 +14,7 @@ package randomizedtest;
  size: The number of items in the list should be size.
 */
 
-public class BuggyAList<Item> {
+public class BuggyAList<Item> implements AList<Item> {
     private Item[] items;
     private int size;
 
