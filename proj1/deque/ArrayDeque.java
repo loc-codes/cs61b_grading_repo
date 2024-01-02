@@ -16,20 +16,22 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
 
-    private void resize (int newCapacity) {
+    private void resize(int newCapacity) {
         T[] resizedArray = (T []) new Object[newCapacity];
         // This variable accounts for "wrapping" of front index.
         // Eg: if front index = 8, capacity = 8, oneAfter will be 0 not 9
         int oneAfterFrontIndex = updateIndex(frontIndex + 1);
         //Handles resizing down of lists that don't wrap
         // eg: frontIndex = 17, backIndex = 49, capacity = 128.
-        if (backIndex - frontIndex == newCapacity || (frontIndex + 1 == capacity && backIndex == size)) {
+        if (frontIndex + 1 == capacity && backIndex == size) {
             System.arraycopy(items, oneAfterFrontIndex, resizedArray, 0, size);
-        }
-        else {
+        } else if (backIndex - frontIndex == newCapacity) {
+            System.arraycopy(items, oneAfterFrontIndex, resizedArray, 0, size);
+        } else {
             //Handles up and down sizing of all other lists
-            System.arraycopy(items, oneAfterFrontIndex,  resizedArray, 0, this.capacity - oneAfterFrontIndex);
-            System.arraycopy(items, 0,  resizedArray, this.capacity - oneAfterFrontIndex, backIndex);
+            int midPoint = this.capacity - oneAfterFrontIndex;
+            System.arraycopy(items, oneAfterFrontIndex, resizedArray, 0, midPoint);
+            System.arraycopy(items, 0, resizedArray, midPoint, backIndex);
         }
         items = resizedArray;
         frontIndex = newCapacity - 1;
@@ -37,10 +39,10 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         this.capacity = newCapacity;
     }
 
-    public int updateIndex(int index) {
+    private int updateIndex(int index) {
         if (index == capacity) {
             index = 0;
-        } else if (index == - 1) {
+        } else if (index == -1) {
             index = capacity - 1;
         }
         return index;
@@ -172,7 +174,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private class ArrayListIterator implements Iterator<T> {
         private int index;
 
-        public ArrayListIterator() {
+        ArrayListIterator() {
             index = frontIndex;
         }
 

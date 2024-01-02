@@ -8,7 +8,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         private Node next;
         private Node prev;
 
-        Node (T i, Node p, Node n) {
+        Node(T i, Node p, Node n) {
             item = i;
             prev = p;
             next = n;
@@ -18,7 +18,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private Node sentinel;
     private int size;
 
-    public LinkedListDeque () {
+    public LinkedListDeque() {
         sentinel = new Node(null, sentinel, sentinel);
         size = 0;
     }
@@ -42,7 +42,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     @Override
-    public void addLast(T elem){
+    public void addLast(T elem) {
         if (size == 0) {
             initialiseList(elem);
         } else {
@@ -54,7 +54,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     @Override
-    public T removeFirst(){
+    public T removeFirst() {
         if (size == 0) {
             System.out.println("Nothing happened...list is already empty");
             return null;
@@ -105,12 +105,12 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return currentNode.item;
     }
 
-    public T getRecursive (int index){
+    public T getRecursive(int index) {
         return getRecursiveHelper(index, sentinel.next).item;
     }
 
-    private Node getRecursiveHelper (int index, Node n) {
-        if (index == 0){
+    private Node getRecursiveHelper(int index, Node n) {
+        if (index == 0) {
             return n;
         } else {
             return getRecursiveHelper(index - 1, n.next);
@@ -170,13 +170,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 //    }
 
     @Override
-    public Iterator<T> iterator(){
+    public Iterator<T> iterator() {
         return new LinkedListIterator();
     }
 
     private class LinkedListIterator implements Iterator<T> {
         private Node currentNode = null;
-        public LinkedListIterator() {
+        LinkedListIterator() {
             currentNode = sentinel.next;
         }
         public boolean hasNext() {
