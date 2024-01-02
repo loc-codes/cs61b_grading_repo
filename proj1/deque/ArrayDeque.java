@@ -1,31 +1,41 @@
 package deque;
-
 import java.util.Iterator;
 
-public class ArrayDeque <T> implements Deque<T> {
-    private T[] items;
-    private int size;
-    private int capacity = 8;
+public class ArrayDeque <T> implements Deque<T>, Iterable<T> {
+    public int size;
+    T[] items;
+    private int capacity;
     public int frontIndex = 4;
     public int backIndex = 5;
 
     // Creates an empty list
     public ArrayDeque(){
+        this.capacity = 8;
         items = (T []) new Object[capacity];
         size = 0;
     }
 
+
     private void resize(int capacity) {
-        T[] a = (T []) new Object[capacity];
-        System.arraycopy(items,frontIndex+1,  a, 0, size-frontIndex-1);
-        System.arraycopy(items,0,  a, size-frontIndex-1, frontIndex+1);
-        items = a;
+        T[] resizedArray = (T []) new Object[capacity];
+        // This variable accounts for "wrapping" of front index. Eg: if front index = 8, capacity = 8, oneAfter will be 0 not 9
+        int oneAfterFrontIndex = updateIndex(frontIndex + 1);
+        //Handles resizing down of lists that don't wrap eg: frontIndex = 17, backIndex = 49, capacity = 128.
+        if (backIndex - frontIndex == capacity) {
+            System.arraycopy(items, oneAfterFrontIndex,  resizedArray, 0, size);
+        }
+        // Handles up and down sizing of all other lists, including wrapped lists
+        else {
+            System.arraycopy(items, oneAfterFrontIndex,  resizedArray, 0, this.capacity-oneAfterFrontIndex);
+            System.arraycopy(items,0,  resizedArray, this.capacity-oneAfterFrontIndex, backIndex);
+        }
+        items = resizedArray;
         frontIndex = capacity - 1;
         backIndex = size;
         this.capacity = capacity;
     }
 
-    private int updateIndex(int index) {
+    public int updateIndex(int index) {
         if (index == capacity) {
             index = 0;
         }
@@ -35,16 +45,7 @@ public class ArrayDeque <T> implements Deque<T> {
         return index;
     }
 
-    private int updateBackIndex(int backIndex) {
-        if (backIndex == capacity) {
-            backIndex = 0;
-        }
-        else if (backIndex == -1){
-            backIndex = capacity - 1;
-        }
-        return backIndex;
-    }
-
+    @Override
     public void addFirst(T elem){
         if (size == capacity) {
             resize(capacity * 2);
@@ -52,9 +53,9 @@ public class ArrayDeque <T> implements Deque<T> {
         items[frontIndex] = elem;
         size += 1;
         frontIndex = updateIndex(frontIndex -1);
-        return;
     }
 
+    @Override
     public void addLast(T elem){
         if (size == capacity) {
             resize(capacity * 2);
@@ -65,6 +66,7 @@ public class ArrayDeque <T> implements Deque<T> {
     }
 
 
+    @Override
     public T get(int i) {
         int getIndex = frontIndex+i+1;
         if (getIndex >= capacity) {
@@ -76,25 +78,25 @@ public class ArrayDeque <T> implements Deque<T> {
     public T getFirst() {
         return get(0);
     }
-
     public T getLast() {
         return get(size-1);
     }
 
+
+    @Override
     public int size() {
         return size;
     }
 
-    public boolean isEmpty(){
-        return size == 0;
-    }
-
+    @Override
     public T removeFirst(){
         if (size == 0){
             System.out.println("Nothing happened...list is already empty");
             return null;
         }
-        else {
+        else if ((size < items.length / 4) && (size >= 16)) {
+            resize(items.length / 4);
+        }
             T removedElem = getFirst();
             frontIndex = updateIndex(frontIndex + 1);
             items[frontIndex] = null;
@@ -102,12 +104,14 @@ public class ArrayDeque <T> implements Deque<T> {
             return removedElem;
         }
 
-    }
-
+    @Override
     public T removeLast(){
         if (size == 0){
             System.out.println("Nothing happened...list is already empty");
             return null;
+        }
+        else if ((size < items.length / 4) && (size >= 16)) {
+            resize(items.length / 4);
         }
         T removedElem = getLast();
         backIndex = updateIndex(backIndex -1);
@@ -116,11 +120,51 @@ public class ArrayDeque <T> implements Deque<T> {
         return removedElem;
     }
 
+    @Override
     public void printDeque(){
-
+        for (int i = 0; i < size; i += 1){
+            System.out.print(get(i) + " ");
+        }
+        System.out.println();
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (this == other) {return true;}
+        if (other instanceof ArrayDeque otherArray) {
+            if (otherArray.size != this.size) {
+                return false;
+            }
+            for (int i = 0; i < size; i += 1){
+                if (this.get(i) != otherArray.get(i)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Iterator<T> iterator(){
-        return null;
+        return new ArrayDeque.ArrayListIterator();
+    }
+
+    private class ArrayListIterator implements Iterator<T> {
+        private int index;
+
+        public ArrayListIterator() {
+            index = frontIndex + 1;
+        }
+
+        public boolean hasNext() {
+            return index != backIndex;
+        }
+
+        public T next() {
+            T returnItem = items[index];
+            index = updateIndex(index + 1);
+            return returnItem;
+        }
     }
 }

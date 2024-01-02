@@ -1,6 +1,11 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 
@@ -141,5 +146,92 @@ public class LinkedListDequeTest {
         assertEquals(null, actual2);
         String actual3 = lld1.getRecursive(2);
         assertEquals("back", actual3);
+    }
+
+    @Test
+    public void iteratorTest() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<Integer>();
+        lld.addLast(1);
+        lld.addLast(2);
+        lld.addLast(3);
+        Iterator<Integer> lldIter = lld.iterator();
+        int x = 0;
+        while (lldIter.hasNext()){
+            int getElem = lld.get(x);
+            int iterElem = lldIter.next();
+            assertEquals(getElem, iterElem);
+            x += 1;
+        }
+    }
+
+    @Test
+    public void iterableTest() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<Integer>();
+        lld.addLast(2);
+        lld.addLast(4);
+        lld.addLast(6);
+        Iterator<Integer> lldIter = lld.iterator();
+        int x = 2;
+        for (int i: lld){
+            assertEquals(x, i);
+            x += 2;
+        }
+    }
+
+    @Test
+    public void equalsTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<Integer>();
+        lld1.addLast(2);
+        lld1.addLast(4);
+        lld1.addLast(6);
+
+        lld2.addLast(2);
+        lld2.addLast(4);
+        lld2.addLast(6);
+        assertTrue(lld1.equals(lld2));
+        lld2.removeLast();
+        assertFalse(lld1.equals(lld2));
+    }
+
+    @Test
+    public void randomizedTest() {
+        LinkedListDeque<Integer> lld = new LinkedListDeque<Integer>();
+
+        int N = 50000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 6);
+            if (operationNumber == 0) {
+                int randVal = StdRandom.uniform(0, 100);
+                lld.addFirst(randVal);
+                System.out.println("addLast(" + randVal + ")");
+            }
+            else if (operationNumber == 1) {
+                int randVal = StdRandom.uniform(0, 100);
+                lld.addLast(randVal);
+                System.out.println("addLast(" + randVal + ")");
+            }
+            else if (operationNumber == 2) {
+                System.out.println("isEmpty(): " + lld.isEmpty());
+            }
+            else if (operationNumber == 3) {
+                int size = lld.size();
+                System.out.println("size: " + size);
+            }
+            else if (operationNumber == 4 && !lld.isEmpty()) {
+                int first = lld.removeFirst();
+                System.out.println("removeFirst() removed " + first);
+            }
+            else if (operationNumber == 5 && !lld.isEmpty()) {
+                int last = lld.removeLast();
+                System.out.println("removeLast() removed " + last);
+            }
+            else if (operationNumber == 6 && !lld.isEmpty()) {
+                int size = lld.size();
+                int randVal = StdRandom.uniform(0, size);
+                int get = lld.get(lld.size() -1);
+                System.out.println("get(" + randVal + ") = " + get);
+            }
+        }
     }
 }
