@@ -14,7 +14,7 @@ public class EqualsAndIteratorTests {
         ArrayDeque<Integer> arrayDeque = new ArrayDeque<>();
 
         // Add elements
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 128; i++) {
             linkedListDeque.addLast(i);
             arrayDeque.addLast(i);
         }
@@ -28,12 +28,38 @@ public class EqualsAndIteratorTests {
         ArrayDeque<Integer> arrayDeque = new ArrayDeque<>();
 
         // Add elements
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 128; i++) {
             linkedListDeque.addLast(i);
             arrayDeque.addLast(i);
         }
 
         assertTrue("ArrayDeque and LinkedListDeque with the same elements should be equal", arrayDeque.equals(linkedListDeque));
+    }
+
+    @Test
+    public void testDeepEquals() {
+        LinkedListDeque<Object> linkedListDeque1 = new LinkedListDeque<>();
+        ArrayDeque<Object> arrayDeque1 = new ArrayDeque<>();
+        LinkedListDeque<Object> linkedListDeque2 = new LinkedListDeque<>();
+        ArrayDeque<Object> arrayDeque2 = new ArrayDeque<>();
+
+        // Adding same elements
+        Object[] elements = {1, "2", null, 3.0, "four"};
+        for (Object elem : elements) {
+            linkedListDeque1.addLast(elem);
+            arrayDeque1.addLast(elem);
+        }
+
+        // Adding same elements in a different order
+        for (int i = elements.length - 1; i >= 0; i--) {
+            linkedListDeque2.addLast(elements[i]);
+            arrayDeque2.addLast(elements[i]);
+        }
+
+        assertTrue("LinkedListDeque and ArrayDeque with the same elements should be equal", linkedListDeque1.equals(arrayDeque1));
+        assertTrue("ArrayDeque and LinkedListDeque with the same elements should be equal", arrayDeque1.equals(linkedListDeque1));
+        assertFalse("Deques with the same elements in different order should not be equal", linkedListDeque1.equals(linkedListDeque2));
+        assertFalse("Deques with the same elements in different order should not be equal", arrayDeque1.equals(arrayDeque2));
     }
 
     @Test
@@ -74,7 +100,7 @@ public class EqualsAndIteratorTests {
     @Test
     public void testMultipleIterators() {
         ArrayDeque<Integer> arrayDeque = new ArrayDeque<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 64; i++) {
             arrayDeque.addLast(i);
         }
 

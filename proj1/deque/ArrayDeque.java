@@ -136,18 +136,21 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     private class ArrayListIterator implements Iterator<T> {
         private int index;
+        private int iterations;
 
         ArrayListIterator() {
-            index = frontIndex+1;
+            index = updateIndex(frontIndex+1);
+            iterations = 0;
         }
 
         public boolean hasNext() {
-            return index != backIndex;
+            return iterations != size;
         }
 
         public T next() {
             T returnItem = items[index];
             index = updateIndex(index + 1);
+            iterations += 1;
             return returnItem;
         }
     }

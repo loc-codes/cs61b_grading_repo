@@ -1,6 +1,7 @@
 package deque;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public interface Deque<T> {
     void addFirst(T elem);
@@ -22,7 +23,9 @@ public interface Deque<T> {
             return false;
         }
         for (int i = 0; i < size(); i += 1) {
-            if (!this.get(i).equals(other.get(i))) {
+            T item1 = this.get(i);
+            Object item2 = other.get(i);
+            if (!Objects.equals(item1, item2)) {
                 return false;
             }
         }
