@@ -56,10 +56,10 @@ public class EqualsAndIteratorTests {
             arrayDeque2.addLast(elements[i]);
         }
 
-        assertTrue("LinkedListDeque and ArrayDeque with the same elements should be equal", linkedListDeque1.equals(arrayDeque1));
-        assertTrue("ArrayDeque and LinkedListDeque with the same elements should be equal", arrayDeque1.equals(linkedListDeque1));
-        assertFalse("Deques with the same elements in different order should not be equal", linkedListDeque1.equals(linkedListDeque2));
-        assertFalse("Deques with the same elements in different order should not be equal", arrayDeque1.equals(arrayDeque2));
+        assertEquals(linkedListDeque1, arrayDeque1);
+        assertEquals(arrayDeque1, linkedListDeque1);
+        assertNotEquals(linkedListDeque1, linkedListDeque2);
+        assertNotEquals(arrayDeque1, arrayDeque2);
     }
 
     @Test
