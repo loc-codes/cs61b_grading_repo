@@ -1,5 +1,6 @@
 package deque;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int size;
@@ -120,6 +121,26 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         size -= 1;
         return removedElem;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+
+        Deque<?> otherDeque;
+        try {
+            otherDeque = (Deque<?>) other;
+        } catch (ClassCastException e) {
+            return false;
+        }
+
+        if (this.size() != otherDeque.size()) return false;
+        for (int i = 0; i < this.size(); i++) {
+            if (!Objects.equals(this.get(i), otherDeque.get(i))) return false;
+        }
+        return true;
+    }
+
 
     @Override
     public void printDeque() {
