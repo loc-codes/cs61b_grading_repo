@@ -19,7 +19,7 @@ public class EqualsAndIteratorTests {
             arrayDeque.addLast(i);
         }
 
-        assertTrue("LinkedListDeque and ArrayDeque with the same elements should be equal", linkedListDeque.equals(arrayDeque));
+        assertTrue(linkedListDeque.equals(arrayDeque));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class EqualsAndIteratorTests {
             arrayDeque.addLast(i);
         }
 
-        assertTrue("ArrayDeque and LinkedListDeque with the same elements should be equal", arrayDeque.equals(linkedListDeque));
+        assertTrue(arrayDeque.equals(linkedListDeque));
     }
 
     @Test
